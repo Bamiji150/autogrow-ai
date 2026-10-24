@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="AutoGrow AI affiliate business tracker with safe scaling and kill switch.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>AutoGrow — Affiliate Business MVP</title>
+  <style>
+    :root{--bg:#0b1220;--panel:#121d2e;--panel2:#18263a;--text:#edf3fc;--muted:#9caec5;--line:#2b3b51;--green:#4ade80;--red:#fb7185;--gold:#f6c86b}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#0b1220,#111d30);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    .wrap{max-width:1100px;margin:auto;padding:22px 16px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+    .brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:var(--green);color:#092018;display:grid;place-items:center;font-weight:900;font-size:23px}
+    h1{font-size:23px;margin:0;letter-spacing:-.5px}h2{font-size:17px;margin:0 0 12px}p{margin:5px 0;color:var(--muted)}.pill{border:1px solid var(--line);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}.card{background:rgba(18,29,46,.95);border:1px solid var(--line);border-radius:18px;padding:17px;min-width:0}.metric{grid-column:span 3}.wide{grid-column:span 8}.side{grid-column:span 4}.half{grid-column:span 6}.full{grid-column:span 12}
+    .metric .label{font-size:12px;color:var(--muted)}.metric .num{font-size:26px;font-weight:800;margin-top:5px;letter-spacing:-.6px}.green{color:var(--green)}.red{color:var(--red)}.gold{color:var(--gold)}
+    label{display:block;color:var(--muted);font-size:12px;margin:10px 0 5px}input,select,textarea{width:100%;background:#0b1422;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--green)}
+    button,.btn{border:0;border-radius:10px;padding:10px 13px;background:var(--green);color:#072116;font-weight:750;cursor:pointer;font:inherit;text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:6px}button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button.danger{background:#5d1f2c;color:#ffe5e9;border:1px solid #8b3446}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .status{display:flex;gap:10px;align-items:flex-start;background:#0b1422;border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}.dot{width:10px;height:10px;border-radius:50%;background:var(--green);margin-top:5px;flex:none}.dot.off{background:var(--red)}.small{font-size:12px;color:var(--muted)}.list{display:grid;gap:10px}.item{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item strong{display:block}.item a{color:var(--green);overflow-wrap:anywhere}.empty{padding:18px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+    .notice{border-left:3px solid var(--gold);padding:10px 12px;background:#211e18;color:#f9e8c3;border-radius:0 10px 10px 0;font-size:13px;margin-bottom:15px}
+    .switchrow{display:flex;justify-content:space-between;align-items:center;gap:12px}.switchrow input{width:20px;height:20px}
+    table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}
+    footer{margin-top:22px;color:var(--muted);font-size:12px;text-align:center}
+    @media(max-width:760px){.metric{grid-column:span 6}.wide,.side,.half{grid-column:span 12}.wrap{padding:16px 12px 40px}.metric .num{font-size:23px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">A</div><div><h1>AutoGrow</h1><p>Affiliate business control room</p></div></div>
+    <div class="pill">MVP · Local-first · ₦0 setup</div>
+  </header>
+
+  <div class="notice"><strong>Important:</strong> This MVP does not generate commissions by itself or verify affiliate sales automatically. Add real approved affiliate links and enter confirmed commissions/costs. Never treat clicks or pending commissions as cash.</div>
+
+  <section class="grid">
+    <div class="card metric"><div class="label">Confirmed revenue</div><div class="num green" id="revenue">₦0</div></div>
+    <div class="card metric"><div class="label">Recorded costs</div><div class="num" id="costs">₦0</div></div>
+    <div class="card metric"><div class="label">Net profit</div><div class="num" id="profit">₦0</div></div>
+    <div class="card metric"><div class="label">Reinvestment allowance</div><div class="num gold" id="allowance">₦0</div></div>
+
+    <div class="card wide">
+      <h2>Business status</h2>
+      <div class="status"><span class="dot" id="statusDot"></span><div><strong id="statusTitle">Safe mode — paused</strong><p id="statusText">Add an affiliate offer and confirm your limits before enabling operations.</p></div></div>
+      <div class="grid" style="gap:10px">
+        <div style="grid-column:span 6"><label for="dailyCap">Maximum daily spend (₦)</label><input id="dailyCap" type="number" min="0" step="100" value="0"></div>
+        <div style="grid-column:span 6"><label for="reinvestPct">Profit reinvestment (%)</label><input id="reinvestPct" type="number" min="0" max="50" step="5" value="20"></div>
+        <div style="grid-column:span 6"><label for="lossLimit">Maximum cumulative loss before stop (₦)</label><input id="lossLimit" type="number" min="0" step="100" value="0"></div>
+        <div style="grid-column:span 6"><label for="minProfit">Minimum net profit to allow scaling (₦)</label><input id="minProfit" type="number" min="0" step="100" value="1000"></div>
+      </div>
+      <div class="actions">
+        <button id="saveSettings">Save limits</button>
+        <button id="enableBtn" class="secondary">Enable tracking</button>
+        <button id="killBtn" class="danger">⏻ Kill switch</button>
+      </div>
+      <p class="small">“Enable tracking” only enables this dashboard's decision rules. It does not launch ads, spend money, or run background jobs.</p>
+    </div>
+
+    <div class="card side">
+      <h2>Scale decision</h2>
+      <div id="scaleDecision" class="status"><span class="dot off"></span><div><strong>Not scaling</strong><p>Profit data required.</p></div></div>
+      <p class="small">Allowed reinvestment is calculated from positive net profit only, capped by your daily limit. This MVP never auto-spends.</p>
+      <div class="actions"><button id="exportBtn" class="secondary">Export backup (JSON)</button><button id="importBtn" class="secondary">Import backup</button><input id="importFile" type="file" accept=".json,application/json" hidden></div>
+    </div>
+
+    <div class="card half">
+      <h2>Add affiliate offer</h2>
+      <form id="offerForm">
+        <label for="offerName">Offer / product name</label><input id="offerName" required maxlength="100" placeholder="e.g. Budget wireless earbuds">
+        <label for="offerCategory">Category</label><input id="offerCategory" maxlength="60" placeholder="e.g. Tech accessories">
+        <label for="offerUrl">Your approved affiliate URL</label><input id="offerUrl" type="url" required placeholder="https://…">
+        <label for="offerNetwork">Affiliate network (optional)</label><input id="offerNetwork" maxlength="80" placeholder="e.g. network name">
+        <div class="actions"><button type="submit">Save offer</button></div>
+      </form>
+      <p class="small">Use only affiliate programs you have joined and links they issued to you. Add a clear affiliate disclosure wherever you publish recommendations.</p>
+    </div>
+
+    <div class="card half">
+      <h2>Record confirmed money</h2>
+      <form id="entryForm">
+        <label for="entryType">Entry type</label><select id="entryType"><option value="revenue">Confirmed commission received</option><option value="cost">Business cost</option></select>
+        <label for="entryAmount">Amount (₦)</label><input id="entryAmount" type="number" min="1" step="0.01" required placeholder="0.00">
+        <label for="entryNote">Note / reference</label><input id="entryNote" maxlength="140" placeholder="e.g. Commission payout received">
+        <div class="actions"><button type="submit">Add entry</button></div>
+      </form>
+      <p class="small">Only record revenue once it is confirmed. For pending commissions, use a note outside the profit total until paid.</p>
+    </div>
+
+    <div class="card full">
+      <div class="switchrow"><h2>Affiliate offers</h2><span class="pill" id="offerCount">0 offers</span></div>
+      <div id="offers" class="list"><div class="empty">No offers yet. Add your first approved affiliate link above.</div></div>
+    </div>
+
+    <div class="card full">
+      <div class="switchrow"><h2>Money ledger</h2><button id="clearLedger" class="secondary">Clear ledger</button></div>
+      <div id="ledgerWrap"></div>
+    </div>
+  </section>
+  <footer>AutoGrow MVP · Data stays in this browser on this device. Export backups regularly. This is a tracker and decision-support tool, not a guarantee of income or financial advice.</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
